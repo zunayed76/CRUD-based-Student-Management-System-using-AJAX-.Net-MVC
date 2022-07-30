@@ -1,0 +1,142 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                $("#drpbtn").html("1");
+            });
+            $("#btn2").click(function () {
+                $("#drpbtn").html("2");
+            });
+            $("#btn3").click(function () {
+                $("#drpbtn").html("3");
+            });
+            $("#btn4").click(function () {
+                $("#drpbtn").html("4");
+            });
+            $("#btn5").click(function () {
+                $("#drpbtn").html("5");
+            });
+            $("#btn6").click(function () {
+                $("#drpbtn").html("6");
+            });
+            $("#btn7").click(function () {
+                $("#drpbtn").html("7");
+            });
+            $("#btn8").click(function () {
+                $("#drpbtn").html("8");
+            });
+            $("#btn9").click(function () {
+                $("#drpbtn").html("9");
+            });
+            $("#btn10").click(function () {
+                $("#drpbtn").html("10");
+            });
+            $("#btns").click(function () {
+                var n = $("#txtname").val();
+                var r = $("#txtroll").val();
+                var dob = $("#txtdob").val();
+                //var c = $("#txtcls").val();
+                var c = $("#drpbtn").text();
+                var cn = $("#txtclsname").val();
+                var csd = $("#txtclsstartdate").val();
+                //ajax method
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/InsertRecord",
+                    data: 'Name=' + n + '&BirthDate=' + dob + '&Roll=' + r + '&Class_=' + c + '&ClassName=' + cn + '&ClassStartDate=' + csd,
+                    success: function (data) {
+                        alert("data saved. this is ajax alert");
+                        $("#txtname").val("");
+                        $("#txtroll").val("");
+                        $("#txtdob").val("");
+                        $("#txtcls").val("");
+                        $("#txtclsname").val("");
+                        $("#txtclsstartdate").val("");
+                    },
+                    error: function () {
+                        alert("Somnething went wrong. ajax /Home/InsertRecord");
+                    }
+                })
+
+
+                //alert("ok");
+
+            });
+            
+        })
+    </script>
+
+</head>
+<body>
+    <div>
+        <h3>ok run kortese</h3>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4" style="border:5px solid rgba(0, 148, 255, 0.5); padding:10px;" id="example">
+                
+                    Name
+                    <input type="text" id="txtname" class="form-control" />
+                    Roll Number
+                    <input type="number" id="txtroll" class="form-control" />
+                    Date of Birth
+                    <input type="date" id="txtdob" class="form-control" />  
+                    Select Class:   
+                    <!-- <input type="number" id="txtcls" class="form-control" /> -->
+                <div class="btn-group dropright" style="border:10px ;padding:10px;">
+
+                    <button type="button" id="drpbtn" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-color:rgb(0, 148, 255); color:#ffffff;">(1 - 10)</button>
+                    <div class="dropdown-menu" id="drpid" >
+                        <button class="btn btn-success" id="btn1" style="background-color:#4fa3a5; border:10px;"> 1 </button>
+                        <button class="btn btn-success" id="btn2" style="background-color: #4fa3a5; border: 10px;"> 2 </button>
+                        <button class="btn btn-success" id="btn3" style="background-color: #4fa3a5; border: 10px;"> 3 </button>
+                        <button class="btn btn-success" id="btn4" style="background-color: #4fa3a5; border: 10px;"> 4 </button><br/>
+                        <button class="btn btn-success" id="btn5" style="background-color: #4fa3a5; border: 10px;"> 5 </button>
+                        <button class="btn btn-success" id="btn6" style="background-color: #4fa3a5; border: 10px;"> 6 </button>
+                        <button class="btn btn-success" id="btn7" style="background-color: #4fa3a5; border: 10px;"> 7 </button>
+                        <button class="btn btn-success" id="btn8" style="background-color: #4fa3a5; border: 10px;"> 8 </button><br />
+                        <button class="btn btn-success" id="btn9" style="background-color: #4fa3a5; border: 10px;"> 9 </button>
+                        <button class="btn btn-success" id="btn10" style="background-color: #4fa3a5; border: 10px;">10 </button><br />
+                    </div>
+                </div>
+                    <br/>
+                    Class Name
+                    <input type="text" id="txtclsname" class="form-control" />
+                    Class Start Date
+                    <input type="date" id="txtclsstartdate" class="form-control" />
+                    <br /><br />
+                    <button class="btn btn-success" id="btns" style="background-color:rgb(0, 148, 255);">Save Record</button>
+                    <br /><br />
+                    <a href="/Home/Display" class="btn btn-danger" style="background-color:rgb(0, 148, 255);">Display Records</a>
+            </div>
+
+            <div class="col-sm-4"></div>
+        </div>
+        
+    </div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Display</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/getList",
+                success: function (data) {
+                    var tab = "";
+                    //tab = tab + "<table class='table table-responsiv'><tr><th>Serial No.</th><th>Name</th><th>Roll Number</th><th>Date of Birth</th><th>Class</th><th>Class Name</th><th>Class Start Date</th><th>Delete</th><th>Edit</th></tr>";
+                    for (var i = 0; i < data.length; i++) {
+                        tab = tab + "<tr><td>" + data[i].StudentID + "</td><td>" + data[i].Name + "</td><td>" + data[i].BirthDate + "</td><td>" + data[i].Roll + "</td><td>" + data[i].Class_ + "</td><td>" + data[i].ClassName + "</td><td>" + data[i].ClassStartDate + "</td><td><span class= 'fa fa-trash spd' style='color:red;font-size:22px'></span></td><td><span class= 'fa fa-edit spd' style='color:blue;font-size:22px'></span></td></tr>";
+                        //tab = tab + "<br/>";
+                    }
+
+                    $("#dd").html(tab);
+                },
+                error: function () {
+                    alert("Something went wrong. AJAX alert. Home/GetList");
+                }
+            });
+            //click event of table
+            $("#myTable").on("click", ".spd", function () {
+                //get current row
+                var cRow = $(this).closest("tr");
+                var sid = cRow.find("td:eq(0)").text();
+                cRow.find("td:eq(7)").click(function () {
+                    //var sid = cRow.find("td:eq(0)").text();
+                    alert("Deleted");
+                    $.getJSON("/Home/DeleteRecord", { StudentID: sid }, function (data) {
+                        //alert("Deleted");
+
+                    })
+                    var previous = null;
+                    var current = null;
+                    console.log('refresh');
+                    location.reload();
+                });
+                //var cRow1 = $(this).closest("tr");
+                //update er event
+                cRow.find("td:eq(8)").click(function () {
+                    //ekhane hbe  
+                    $.getJSON("/Home/getSingleRow", { StudentID: sid }, function (data) {
+                        //alert(data[0].ClassName);
+                        $("#txth").val(data[0].StudentID);
+                        $("#txtname").val(data[0].Name);
+                        $("#txtroll").val(data[0].Roll);
+                        $("#txtdob").val(data[0].BirthDate);
+                        $("#txtcls").val(data[0].Class_);
+                        $("#txtclsname").val(data[0].ClassName);
+                        $("#txtclsstartdate").val(data[0].ClassStartDate);
+                        $("#btnm").trigger("click");
+                        
+                    })
+                    //$("#btnm").trigger("click");
+                   
+                });
+            });
+            $("#btnu").click(function () {
+                var sid = $("#txth").val();
+                var n = $("#txtname").val();
+                var r = $("#txtroll").val();
+                var dob = $("#txtdob").val();
+                var c = $("#txtcls").val();
+                var cn = $("#txtclsname").val();
+                var csd = $("#txtclsstartdate").val();
+
+                //alert(sid);
+                $.getJSON("/Home/UpdateRecord", { sid: sid, n: n, r: r, dob: dob, c: c, cn: cn, csd: csd }, function (data) {
+                    alert("Record Updated Successfully ajax!");
+                    console.log('refresh');
+                    location.reload();
+                });
+            });
+        });
+
+    </script>
+
+</head>
+
+
+
+
+<body >
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="btnm" style="display:none">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#0094ff">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Update Record</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10" style="border:5px solid rgba(0, 148, 255, 0.5); padding:10px;">
+                            <input type="hidden" id="txth" />
+                            Name
+                            <input type="text" id="txtname" class="form-control" />
+                            Roll Number
+                            <input type="number" id="txtroll" class="form-control" />
+                            Date of Birth
+                            <input type="date" id="txtdob" class="form-control" />
+                            Class
+                            <input type="number" id="txtcls" class="form-control" />
+                            Class Name
+                            <input type="text" id="txtclsname" class="form-control" />
+                            Class Start Date
+                            <input type="date" id="txtclsstartdate" class="form-control" />
+                            <br /><br />
+
+                        </div>
+
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnu">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10" style="border:5px solid rgba(0, 148, 255, 0.5); padding:5px; background:rgb(194, 232, 230); margin-top: 10%">
+                <a href="/Home" style="background-color:rgb(0, 148, 255); border:10px; float: right; padding: 10px; color: white">Insert New</a>
+                <table class='table table-responsive table-bordered' id="myTable">
+                    <thead><tr><th>Serial No.</th><th>Name</th><th>Roll Number</th><th>Date of Birth</th><th>Class</th><th>Class Name</th><th>Class Start Date</th><th>Delete</th><th>Edit</th></tr></thead>
+                    <tbody id="dd">
+
+                    </tbody>
+                </table>
+
+</div>
+            <div class="col-sm-10">
+                <!--<a href="/Home" style="background-color:rgb(0, 148, 255); border:10px; float: right; padding: 10px; color: white">Insert New</a>  -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
